@@ -7,6 +7,11 @@ from datetime import datetime, timezone
 from config import Config
 from llama_local import LocalLLM
 
+# A useful VectorDB
+from vector_db.local_chroma_db import LocalChromaDB
+import pandas as pd
+vec_db = LocalChromaDB()
+
 # to use the .env file for user creds - this should be fixed to
 # use a real auth system.
 import os
@@ -90,6 +95,94 @@ def protected():
     except Exception as e:
         # Log the error in production
         return jsonify({'error': 'Internal server error'}), 500
+
+
+# Vector Database Functions:
+# we add to the vector DB like the following:
+# vec_db.add_document(["This is a document about utility knives", {"topic": "tools"}])    
+# then we request them using lines like these:
+# chroma_rag_nn = vec_db.retrieve_docs_by_query("saws and hammers",10)
+# or
+# TODO: Implement this one here
+# chroma_rag_nn_limited = vec_db.retrieve_docs_by_metadata_and_query("saws and hammers","topic", ["tools"],10)
+
+@app.route('/api/test_document', methods=['POST'])
+@require_auth
+@limiter.limit("30 per minute")  # Add rate limiting specific to this endpoint
+def test_document():
+    # Validate input
+    return jsonify({})
+
+
+@app.route('/api/add_document', methods=['POST'])
+@require_auth
+@limiter.limit("30 per minute")  # Add rate limiting specific to this endpoint
+def add_document():
+    # Validate input
+    if not request.is_json:
+        return jsonify({'error': 'Content-Type must be application/json'}), 400
+    
+    input_doc = request.json.get('input_doc')
+    if not input_doc:
+        return jsonify({'error': 'input_doc is required'}), 400
+    
+    if not isinstance(input_doc, list):
+        return jsonify({'error': 'input_doc must be a list with 2 elements'}), 400
+    
+    # Optional: Add input length limit to prevent abuse
+    if len(str(input_doc)) > 2000:  # Adjust limit as needed
+        return jsonify({'error': 'input document too long'}), 400
+
+    try:
+        # Process the input string
+        vec_db.add_document(input_doc) 
+        
+        # Return the response
+        return jsonify({
+            'response_string': 'document added to vector database',
+            'user': request.user['user']
+        })
+    except Exception as e:
+        # Log the error in production
+        return jsonify({'error': 'Internal server error'}), 500
+
+
+@app.route('/api/query_similar_docs', methods=['POST'])
+@require_auth
+@limiter.limit("30 per minute")  # Add rate limiting specific to this endpoint
+def query_similar_docs():
+    # Validate input
+    if not request.is_json:
+        return jsonify({'error': 'Content-Type must be application/json'}), 400
+    
+    input_string = request.json.get('input_string')
+    if not input_string:
+        return jsonify({'error': 'input_string is required'}), 400
+    
+    if not isinstance(input_string, str):
+        return jsonify({'error': 'input_string must be a string'}), 400
+    
+    # Optional: Add input length limit to prevent abuse
+    if len(input_string) > 2000:  # Adjust limit as needed
+        return jsonify({'error': 'input_string too long'}), 400
+
+    num_docs = request.json.get('num_docs',10)
+
+    try:
+        # Process the input string
+        response = vec_db.retrieve_docs_by_query(input_string,int(num_docs))
+        #response_string = llm.output(input_string)
+        
+        # Return the response
+        return jsonify({
+            'docs': str(response),
+            'user': request.user['user']
+        })
+    except Exception as e:
+        # Log the error in production
+        return jsonify({'error': 'Internal server error'}), 500
+
+
 
 if __name__ == '__main__':
     # Run with SSL in production

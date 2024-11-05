@@ -1,8 +1,5 @@
 from basic_rag_system import RAGVectorDB
-import os
-
 from local_chroma_db import LocalChromaDB
-import uuid
 
 # display options
 import pandas as pd

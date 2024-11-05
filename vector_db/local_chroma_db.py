@@ -47,6 +47,9 @@ class LocalChromaDB:
             metadatas=metadata,
         )
         print('There are now ' + str(self.collection.count()) + ' Records in the Local DB')
+
+    def add_document(self,doc):
+        return self.add_documents([doc])
         
     def retrieve_docs(self, query_text, num_results=10):
         """

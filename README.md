@@ -73,3 +73,26 @@ Just try it out with the script like so:
 
 So let's add a vectorDB on top.  Or two!  Give this a shot to test them out:
 python vector_db/test_rag_systems.py
+
+What have we done here?  There are two vector DB approaches here, that can both be used for RAG purposes.  
+ - A home-rolled vector-DB based on an ultra-lightweight local encoder, or
+ - A VectorDB setup based on ChromaDB.
+
+ Here's a quick tester script for it!
+
+ ./test_vector_db.sh example_username fix_this_put_in_a_real_auth_system localhost "This is a short document about frogs." "this is a similar short document but it is about tools and hardware." "I just wanted to check that frogs are more similar to one of these."
+
+ Running that will put the first 2 elements into a local VectorDB, and then figure out how close each are to the third sentence.
+
+
+### TODO: Put the eector databases and LLM together to make a RAG system example
+To do this, we will:
+  - Synthesize a bunch of synthetic articles using our shiny new LLM, plus some keywords as metadata
+  - Input these all into our RAG system (no chunking for now, just embed everything)
+  - Synthesize a question about an arbitary topic and use the VectorDB system to pull nearest neighbors
+  - Add that context into the user question and get an answer
+
+## Improvments for the LLM+RAG System:
+ - nice chunking system (contexual, extracted-details or summarization-based RAG)
+ - A better query conditioner (expand the question, use keywords, cite references from context)
+ - Better compartmentalization of the system (users may just want the LLM, or just want the VecDB, etc.)
