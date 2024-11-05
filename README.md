@@ -85,7 +85,7 @@ What have we done here?  There are two vector DB approaches here, that can both 
  Running that will put the first 2 elements into a local VectorDB, and then figure out how close each are to the third sentence.
 
 
-### TODO: Put the eector databases and LLM together to make a RAG system example
+### TODO: Put the vector databases and LLM together to make a RAG system example
 To do this, we will:
   - Synthesize a bunch of synthetic articles using our shiny new LLM, plus some keywords as metadata
   - Input these all into our RAG system (no chunking for now, just embed everything)
