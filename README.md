@@ -66,3 +66,10 @@ curl -k -X POST https://localhost:5000/api/protected   -H "Authorization: Bearer
 # Example Run:
 Just try it out with the script like so:
 ./call_remote_llm.sh example_username fix_this_put_in_a_real_auth_system localhost "write a short poem about frogs."
+
+
+
+# But Wait - I bet you came for more than just an LLM.  
+
+So let's add a vectorDB on top.  Or two!  Give this a shot to test them out:
+python vector_db/test_rag_systems.py

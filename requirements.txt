@@ -1,4 +1,7 @@
 # requirements.txt
+chromadb
+sentence_transformers
+pandas
 flask==2.3.3
 flask-limiter==3.3.1
 huggingface-hub==0.26.2
