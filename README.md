@@ -78,9 +78,7 @@ What have we done here?  There are two vector DB approaches here, that can both 
  - A home-rolled vector-DB based on an ultra-lightweight local encoder, or
  - A VectorDB setup based on ChromaDB.
 
- Here's a quick tester script for it!
-
- ./test_vector_db.sh example_username fix_this_put_in_a_real_auth_system localhost "This is a short document about frogs." "this is a similar short document but it is about tools and hardware." "I just wanted to check that frogs are more similar to one of these."
+Test it out from the tests directory - it's test_vector_db.sh , and will show you how to add documents to the vector database and then get the nearest neighbors to another piece of text.
 
  Running that will put the first 2 elements into a local VectorDB, and then figure out how close each are to the third sentence.
 
