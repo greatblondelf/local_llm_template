@@ -49,7 +49,7 @@ def require_auth(f):
     return decorated
 
 @app.route('/api/login', methods=['POST'])
-@limiter.limit("5 per minute")  # Stricter limit for login attempts
+@limiter.limit("50 per minute")  # Stricter limit for login attempts
 def login():
     # In production, validate against your user database
     if request.json.get('username') == os.getenv('USERNAME1') and request.json.get('password') == os.getenv('PASSWORD'):
